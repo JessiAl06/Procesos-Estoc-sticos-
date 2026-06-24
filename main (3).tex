@@ -1,0 +1,450 @@
+\documentclass[12pt,letterpaper]{article}
+
+% ── Paquetes ──────────────────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{mdframed}
+
+\geometry{margin=2.5cm}
+
+% ── Entornos ──────────────────────────────────────────────────────────────────
+\newtheoremstyle{ejercicio}
+  {10pt}{10pt}{\normalfont}{0pt}{\bfseries}{.}{.5em}{}
+\theoremstyle{ejercicio}
+\newtheorem{ejercicio}{Ejercicio}[section]
+
+\newtheoremstyle{solucion}
+  {6pt}{6pt}{\normalfont}{0pt}{\itshape}{.}{.5em}{}
+\theoremstyle{solucion}
+\newtheorem*{solucion}{Solución}
+
+\newmdenv[
+  linecolor=gray!60,
+  backgroundcolor=gray!6,
+  roundcorner=4pt,
+  innerleftmargin=10pt,
+  innerrightmargin=10pt,
+  innertopmargin=8pt,
+  innerbottommargin=8pt
+]{recuadro}
+
+% ── Macros ────────────────────────────────────────────────────────────────────
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\Ft}{\mathcal{F}_t}
+\newcommand{\BM}{(B_t)_{t\ge 0}}
+\newcommand{\Law}{\mathcal{L}}
+\newcommand{\iid}{\overset{\text{iid}}{\sim}}
+\newcommand{\dto}{\overset{d}{=}}
+\newcommand{\as}{\text{ c.s.}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+
+% ── Título ────────────────────────────────────────────────────────────────────
+\title{%
+  \textbf{Tarea-Examen: Movimiento Browniano}\\[4pt]
+  \large Soluciones — Secciones II y III (Ejercicios 46–61)\\
+  \normalsize Movimiento Browniano, Martingalas y Aplicaciones\\
+  Matemáticas Aplicadas y Computación
+}
+\author{}
+\date{}
+
+% ──────────────────────────────────────────────────────────────────────────────
+\begin{document}
+\maketitle
+
+
+
+% ==============================================================================ash
+
+
+
+\section{Cambios de medida, deriva y teorema de Girsanov (Ejercicios 46--55)}
+% ==============================================================================
+
+%─── Ejercicio 46 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 46 — Girsanov (deriva constante)}
+
+\begin{recuadro}
+Sea $\theta\in\R$, $T>0$ y $dQ^\theta/dP|_{\F_T}=\exp(\theta B_T-\frac{\theta^2}{2}T)$.
+Demuestre que $\tilde B_t:=B_t-\theta t$ es MB estándar bajo $Q^\theta$.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{Validez de la densidad.} $Z_t^\theta:=e^{\theta B_t-\frac{\theta^2}{2}t}$ es martingala
+positiva con $\E[Z_t^\theta]=1$ (Ejemplo I.14 del documento).
+
+\textbf{Función característica bajo $Q^\theta$.} Para $0\le s\le t\le T$:
+\begin{align*}
+  E^{Q^\theta}[e^{iu(\tilde B_t-\tilde B_s)}\mid\F_s]
+  &=\frac{1}{Z_s^\theta}E^P\!\left[Z_t^\theta e^{iu(B_t-B_s-\theta(t-s))}\mid\F_s\right].
+\end{align*}
+Usando independencia de $B_t-B_s$ respecto a $\F_s$:
+\[
+  =e^{-iu\theta(t-s)}\cdot e^{\frac{(\theta+iu)^2}{2}(t-s)-\frac{\theta^2}{2}(t-s)}
+  =e^{-u^2(t-s)/2}.
+\]
+Esto es la función característica de $\mathcal{N}(0,t-s)$, independiente de $\F_s$.
+Por el criterio de Lévy, $\tilde B$ es MB estándar bajo $Q^\theta$.
+\end{solucion}
+
+%─── Ejercicio 47 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 47 — Ley de $B_t$ y covarianza bajo $Q^\theta$}
+
+\begin{recuadro}
+Calcule bajo $Q^\theta$ la ley de $B_t$ y la covarianza de $(B_s,B_t)$.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{Ley.} $B_t=\tilde B_t+\theta t$ con $\tilde B_t\overset{Q^\theta}{\sim}\mathcal{N}(0,t)$:
+\[
+  B_t\overset{Q^\theta}{\sim}\mathcal{N}(\theta t,\,t).
+\]
+\textbf{Covarianza.} Para $s\le t$:
+\[
+  \Cov^{Q^\theta}(B_s,B_t)=\Cov^{Q^\theta}(\tilde B_s,\tilde B_t)=\min\{s,t\}=s.
+\]
+Girsanov modifica la deriva pero preserva la variación cuadrática (covarianza intacta).
+\end{solucion}
+
+%─── Ejercicio 48 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 48 — Densidad de transición de $X_t=B_t+\mu t$ y Fokker–Planck}
+
+\begin{recuadro}
+Use Girsanov para deducir la densidad de transición de $X_t=B_t+\mu t$ y verificar la
+ecuación de Fokker–Planck.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{Densidad.} $X_t-X_s=(B_t-B_s)+\mu(t-s)\sim\mathcal{N}(\mu(t-s),t-s)$, luego:
+\[
+  p_t(x,y)=\frac{1}{\sqrt{2\pi t}}\exp\!\left(-\frac{(y-x-\mu t)^2}{2t}\right).
+\]
+\textbf{Fokker–Planck.} Derivando con $u=(y-x-\mu t)/\sqrt{t}$:
+\[
+  \partial_t p=-\mu\,\partial_y p+\tfrac{1}{2}\partial_{yy}p.
+\]
+Verificación: $\partial_t p=p(\mu u/\sqrt{t}-1/(2t))$;
+$-\mu\partial_y p+\frac{1}{2}\partial_{yy}p=p(\mu u/\sqrt{t}+u^2/(2t)-1/(2t))=\partial_t p$.\;\checkmark
+\end{solucion}
+
+%─── Ejercicio 49 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 49 — Transformada de Laplace de $\tau_a^\mu$}
+
+\begin{recuadro}
+Sea $\tau_a^\mu:=\inf\{t:B_t+\mu t=a\}$, $a>0$. Obtenga $\E[e^{-\lambda\tau_a^\mu}]$.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{Martingala exponencial.} Para $X_t=B_t+\mu t$, el proceso
+$e^{\theta X_t-(\theta^2/2+\theta\mu)t}$ es martingala cuando $\theta^2/2+\theta\mu=\lambda$,
+cuyas raíces son $\theta_\pm=-\mu\pm\sqrt{\mu^2+2\lambda}$. Tomamos $\theta_0=-\mu+\sqrt{\mu^2+2\lambda}>0$.
+
+\textbf{Parada opcional.} $1=E[e^{\theta_0 X_{\tau_a^\mu}-\lambda\tau_a^\mu}]=e^{\theta_0 a}\,\E[e^{-\lambda\tau_a^\mu}]$, luego:
+\[
+  \boxed{\E[e^{-\lambda\tau_a^\mu}]=e^{-\theta_0 a}=\exp\!\left(-a\bigl(-\mu+\sqrt{\mu^2+2\lambda}\bigr)\right).}
+\]
+Para $\mu=0$: $\E[e^{-\lambda\tau_a}]=e^{-a\sqrt{2\lambda}}$ (Ejercicio~86).
+\end{solucion}
+
+%─── Ejercicio 50 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 50 — Criterio de Novikov y exponencial estocástica}
+
+\begin{recuadro}
+Si $\E[\exp(\frac{1}{2}\int_0^T u_s^2\,ds)]<\infty$, demuestre que
+$Z_t=\exp(\int_0^t u_s\,dB_s-\frac{1}{2}\int_0^t u_s^2\,ds)$ es martingala.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{$Z$ es martingala local.} Por Itô aplicado a $e^{X_t}$ con $dX_t=u_t\,dB_t-\frac{1}{2}u_t^2\,dt$:
+\[
+  dZ_t=Z_t\,u_t\,dB_t,\quad Z_0=1.
+\]
+Luego $Z$ es martingala local positiva.
+
+\textbf{Criterio de Novikov.}
+\begin{recuadro}
+Si $\E\!\bigl[\exp\!\bigl(\frac{1}{2}\int_0^T u_s^2\,ds\bigr)\bigr]<\infty$,
+entonces $Z$ es martingala verdadera en $[0,T]$.
+\end{recuadro}
+La hipótesis es exactamente el criterio de Novikov, luego $\E[Z_t]=1$ y $dQ=Z_T\,dP$ es
+medida de probabilidad equivalente a $P$.
+\end{solucion}
+
+%─── Ejercicio 51 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 51 — $\tilde B_t=B_t-\int_0^t u_s\,ds$ es MB bajo $Q$}
+
+\begin{recuadro}
+Bajo $Q$ del Ejercicio~50, demuestre que $\tilde B_t:=B_t-\int_0^t u_s\,ds$ es MB estándar.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{Martingala local bajo $Q$.} Por Girsanov: $\tilde B_t=B_t-\langle B,M\rangle_t$
+con $M_t=\int_0^t u_s\,dB_s$, luego $\langle B,M\rangle_t=\int_0^t u_s\,ds$.
+El lema de Girsanov garantiza que $\tilde B$ es martingala local bajo $Q$.
+
+\textbf{Variación cuadrática.} $[\tilde B]_t=[B]_t=t$ (el término $\int u_s\,ds$ es de
+variación finita, sin contribución cuadrática).
+
+\textbf{Criterio de Lévy.} $\tilde B_0=0$, continua, martingala local bajo $Q$,
+$[\tilde B]_t=t$ $\implies$ $\tilde B$ es MB estándar bajo $Q$.
+\end{solucion}
+
+%─── Ejercicio 52 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 52 — Por qué falla la equivalencia en horizonte infinito}
+
+\begin{recuadro}
+Discuta por qué $Q\sim P$ suele fallar en horizonte infinito.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{Ejemplo.} Para $\theta\ne 0$, la densidad $Z_T^\theta=e^{\theta B_T-\frac{\theta^2}{2}T}$ cumple:
+\[
+  Z_T^\theta=\exp\!\left(\theta\sqrt{T}\cdot\frac{B_T}{\sqrt{T}}-\frac{\theta^2}{2}T\right)\xrightarrow{T\to\infty}0\quad\as\;(P),
+\]
+pues el exponent $-\frac{\theta^2}{2}T\to-\infty$ domina. Luego $Z_\infty=0$ c.s.\ bajo $P$,
+y la medida $Q_\infty$ definida en $\F_\infty$ satisface $Q_\infty(A)=\E^P[Z_\infty\mathbf{1}_A]=0$
+para todo $A$: $Q_\infty$ es la medida nula, no equivalente a $P$.
+
+\textbf{Intuición.} Bajo $Q^\theta$: $B_T/T\to\theta$ (LGN); bajo $P$: $B_T/T\to 0$.
+Las dos leyes son asintóticamente separables $\Rightarrow$ singularidad mutua en $\F_\infty$.
+
+\textbf{Criterio de Kakutani.} $Q_\infty\sim P_\infty\iff\sum_n\E[(1-\sqrt{Z_{T_n}/Z_{T_{n-1}}})^2]<\infty$
+(divergencia de Hellinger finita). Para deriva constante $\theta\ne 0$ esta suma diverge.
+\end{solucion}
+
+%─── Ejercicio 53 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 53 — Girsanov con $u_t=\alpha B_t$}
+
+\begin{recuadro}
+Escriba la densidad de Girsanov para $u_t=\alpha B_t$ y determine para qué $\alpha$
+la exponencial tiene integrabilidad suficiente en horizonte $T$ fijo.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{Densidad formal.} Usando $\int_0^T B_t\,dB_t=\frac{1}{2}(B_T^2-T)$ (Itô):
+\[
+  Z_T=\exp\!\left(\frac{\alpha}{2}(B_T^2-T)-\frac{\alpha^2}{2}\int_0^T B_t^2\,dt\right).
+\]
+\textbf{Criterio de Novikov.} Se requiere $\E[e^{\frac{\alpha^2}{2}\int_0^T B_t^2\,dt}]<\infty$.
+
+Esto es la función de partición del oscilador armónico cuántico, finita si y solo si:
+\[
+  \frac{\alpha^2}{2}<\frac{\pi^2}{8T}\implies|\alpha|<\frac{\pi}{2\sqrt{T}}.
+\]
+Para $|\alpha|<\pi/(2\sqrt{T})$, $Z_T$ es martingala verdadera y $Q$ transforma $B$ en
+un proceso de Ornstein–Uhlenbeck bajo $Q$.
+\end{solucion}
+
+%─── Ejercicio 54 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 54 — Lognormal y fórmula tipo Black–Scholes}
+
+\begin{recuadro}
+Sea $N\sim\mathcal{N}(0,1)$ y $X:=ae^{bN}$, $a,b>0$. Demuestre que
+$f(x)=\frac{1}{xb}\phi\!\left(\frac{\log(x/a)}{b}\right)$ y calcule $E[(X-K)^+]$.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{Densidad de $X$.}
+$F_X(x)=\P(ae^{bN}\le x)=\Phi\!\left(\frac{\log(x/a)}{b}\right)$, derivando:
+\[
+  f(x)=\frac{1}{xb}\,\phi\!\left(\frac{\log(x/a)}{b}\right),\quad x>0.\;\checkmark
+\]
+\textbf{Cálculo de $E[(X-K)^+]$.} Sea $d_2:=\frac{\log(a/K)}{b}$.
+\[
+  \P(X>K)=\Phi(d_2).
+\]
+\[
+  E[X\mathbf{1}_{X>K}]=a\,E[e^{bN}\mathbf{1}_{N>-d_2}]
+  =a\int_{-d_2}^\infty e^{bz}\phi(z)\,dz=ae^{b^2/2}\Phi(d_2+b).
+\]
+Con $d_1:=d_2+b$:
+\[
+  \boxed{E[(X-K)^+]=ae^{b^2/2}\Phi(d_1)-K\Phi(d_2).}
+\]
+Esta es la fórmula de Black–Scholes con $a=S_0$, $e^{b^2/2}=e^{rT}$, $b=\sigma\sqrt{T}$.
+\end{solucion}
+
+%─── Ejercicio 55 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 55 — Girsanov discreto}
+
+\begin{recuadro}
+Con $Z_n=Z_{n-1}+f(Z_{n-1})+X_n$, $X_i\iid\mathcal{N}(0,1)$, y
+$M_n=\exp\!\bigl(-\sum_{j=1}^n f(Z_{j-1})X_j-\frac{1}{2}\sum_{j=1}^n f(Z_{j-1})^2\bigr)$,
+demuestre que $(M_n)$ y $(M_nZ_n)$ son martingalas, y que $(Z_n)$ es martingala bajo $d\tilde P=M_n\,dP$.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{$(M_n)$ es martingala.} Sea $c=f(Z_{n-1})$, $c$-medible respecto a $\F_{n-1}$:
+\[
+  \E[M_n\mid\F_{n-1}]=M_{n-1}\,e^{-c^2/2}\,\E[e^{-cX_n}]=M_{n-1}\,e^{-c^2/2}\,e^{c^2/2}=M_{n-1}.
+\]
+La cancelación del término cuadrático es la ``corrección de Itô discreta''.
+
+\textbf{$(M_nZ_n)$ es martingala.} Con $a=Z_{n-1}$:
+\[
+  E[e^{-cX}(a+c+X)]\big|_{X\sim\mathcal{N}(0,1)}=(a+c)e^{c^2/2}+e^{c^2/2}(-c)=ae^{c^2/2}.
+\]
+Luego $\E[M_nZ_n\mid\F_{n-1}]=M_{n-1}e^{-c^2/2}\cdot Z_{n-1}e^{c^2/2}=M_{n-1}Z_{n-1}$.
+
+\textbf{$(Z_n)$ martingala bajo $\tilde P$.}
+\[
+  E^{\tilde P}[Z_n\mid\F_{n-1}]=\frac{\E^P[M_nZ_n\mid\F_{n-1}]}{M_{n-1}}=\frac{M_{n-1}Z_{n-1}}{M_{n-1}}=Z_{n-1}.\qquad\checkmark
+\]
+\end{solucion}
+
+
+\newpage
+\section{Puentes brownianos y filtración (Ejercicios 56--61)}
+% ==============================================================================
+
+%─── Ejercicio 56 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 56 — Puente browniano $\beta_t=B_t-tB_1$}
+
+\begin{recuadro}
+Demuestre que $\beta_t:=B_t-tB_1$ es un puente browniano con
+$\Cov(\beta_s,\beta_t)=\min\{s,t\}-st$.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{Gaussiano centrado.} $\beta_t$ es combinación lineal de valores del MB:
+gaussiano, $\E[\beta_t]=0$, $\beta_0=\beta_1=0$.
+
+\textbf{Covarianza.} Para $0\le s\le t\le 1$:
+\begin{align*}
+  \Cov(\beta_s,\beta_t)
+  &=\E[(B_s-sB_1)(B_t-tB_1)]
+   =\E[B_sB_t]-t\E[B_sB_1]-s\E[B_1B_t]+st\E[B_1^2]\\
+  &=s-ts-st+st=s-st=s(1-t)=\min\{s,t\}-st.\;\checkmark
+\end{align*}
+\end{solucion}
+
+%─── Ejercicio 57 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 57 — Representación alternativa $X_t=(1-t)B_{t/(1-t)}$}
+
+\begin{recuadro}
+Demuestre que $X_t=(1-t)B_{t/(1-t)}$, $0\le t<1$, se extiende continuamente en $t=1$
+con la ley del puente browniano.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{Covarianza.} Para $s\le t<1$, con $u=s/(1-s)$, $v=t/(1-t)$:
+\[
+  \Cov(X_s,X_t)=(1-s)(1-t)\min\{u,v\}=(1-s)(1-t)\cdot\frac{s}{1-s}=s(1-t).\;\checkmark
+\]
+\textbf{Extensión en $t=1$.} Por la LLI del MB:
+$|X_t|=(1-t)|B_{t/(1-t)}|\le C\sqrt{(1-t)t\log\log\frac{1}{1-t}}\to 0$ c.s.\ cuando $t\to 1^-$.
+Definimos $X_1:=0$: el proceso es continuo en $[0,1]$ con $X_0=X_1=0$ y covarianza del puente.
+\end{solucion}
+
+%─── Ejercicio 58 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 58 — Ley de $\int_0^1\beta_t\,dt$ y $\sup_{[0,1]}\beta_t$}
+
+\begin{recuadro}
+Calcule la ley de $\int_0^1\beta_t\,dt$ y de $\sup_{0\le t\le 1}\beta_t$.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{Integral del puente.} $I:=\int_0^1\beta_t\,dt$ es gaussiana centrada con:
+\[
+  \Var(I)=\int_0^1\int_0^1(\min\{s,t\}-st)\,ds\,dt=\frac{1}{3}-\frac{1}{4}=\frac{1}{12}.
+\]
+\[
+  \boxed{I\sim\mathcal{N}\!\left(0,\,\tfrac{1}{12}\right).}
+\]
+\textbf{Supremo del puente.} La distribución de $S:=\sup_{[0,1]}\beta_t$ es la
+distribución de Kolmogorov--Smirnov:
+\[
+  \P(S\le x)=1-e^{-2x^2},\quad x>0.
+\]
+Media: $\E[S]=\sqrt{\pi/2}/\sqrt{2}=\sqrt{\pi}/2\approx 0.886$.
+\end{solucion}
+
+%─── Ejercicio 59 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 59 — MB condicionado a $B_T=x$}
+
+\begin{recuadro}
+Pruebe que condicionado a $B_T=x$, el proceso $(B_t)_{0\le t\le T}$ tiene la ley de
+$\frac{t}{T}x+\beta_t^{(T)}$, donde $\beta^{(T)}$ es un puente browniano de longitud $T$.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{Descomposición.} Sea $\hat\beta_t:=B_t-\frac{t}{T}B_T$.
+
+\textbf{Independencia de $B_T$.}
+\[
+  \Cov(\hat\beta_t,B_T)=\E\!\left[\Bigl(B_t-\tfrac{t}{T}B_T\Bigr)B_T\right]=t-\frac{t}{T}\cdot T=0.
+\]
+Siendo conjuntamente gaussianos con covarianza cero, son independientes.
+
+\textbf{Covarianza de $\hat\beta$.} Para $s\le t$:
+\[
+  \Cov(\hat\beta_s,\hat\beta_t)=s-\frac{st}{T}-\frac{st}{T}+\frac{st}{T}=s\!\left(1-\frac{t}{T}\right).
+\]
+Esta es la covarianza del puente browniano de longitud $T$.
+
+\textbf{Conclusión.} Condicionado a $B_T=x$: $B_t=\frac{t}{T}x+\hat\beta_t$
+donde $\hat\beta^{(T)}\perp B_T$ es un puente browniano de longitud $T$.
+\end{solucion}
+
+%─── Ejercicio 60 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 60 — Regularidad a la derecha de la filtración}
+
+\begin{recuadro}
+Sea $\F_t^+:=\bigcap_{u>t}\sigma(B_s:s\le u)$. Discuta por qué $\F_t=\F_t^+$ tras completación.
+\end{recuadro}
+
+\begin{solucion}
+Por definición $\F_t\subseteq\F_t^+$. Para la inclusión reversa: cualquier evento
+$A\in\F_t^+$ es límite de eventos que dependen de $B_{t+\varepsilon}$ con $\varepsilon\to 0^+$.
+Por continuidad de las trayectorias: $B_{t+\varepsilon}\to B_t$ c.s., luego funciones medibles de
+$B_{t+\varepsilon}$ convergen c.s.\ a funciones de $B_t$. Esto implica que $A$ coincide con un
+evento de $\F_t$ salvo un conjunto de medida nula.
+
+Formalmente: la completación garantiza $\F_t^+=\F_t$ (condición usual de las condiciones usuales
+para el MB). Esto asegura que los tiempos de llegada a abiertos son tiempos de paro y la
+propiedad de Markov fuerte funciona correctamente.
+\end{solucion}
+
+%─── Ejercicio 61 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 61 — MB en la filtración agrandada $\mathcal{G}_t=\sigma(B_s:s\le t,B_1)$}
+
+\begin{recuadro}
+Sea $\mathcal{G}_t=\sigma(B_s:s\le t,B_1)$. Describa la semimartingala obtenida al ver
+el MB en $(\mathcal{G}_t)$.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{Intuición.} El observador conoce $B_1$ en todo momento: $B$ ya no es martingala bajo
+$(\mathcal{G}_t)$ pues $\E[B_t\mid\mathcal{G}_0]=E[B_t\mid B_1]=tB_1$.
+
+\textbf{Descomposición de Jeulin--Yor.} Para $0\le t<1$:
+\[
+  B_t=\tilde W_t+\int_0^t\frac{B_1-B_s}{1-s}\,ds,
+\]
+donde $\tilde W$ es MB bajo $(\mathcal{G}_t)$. La deriva $\frac{B_1-B_s}{1-s}$ es la velocidad
+media para alcanzar $B_1$ en tiempo $1$, dada posición $B_s$.
+
+\textbf{Interpretación.} $B$ se comporta bajo $(\mathcal{G}_t)$ como un puente browniano
+condicionado a terminar en $B_1$: la EDE del puente es $d\beta_t=-\frac{\beta_t}{1-t}dt+d\tilde W_t$.
+En finanzas matemáticas, este fenómeno modela el insider trading.
+\end{solucion}
+
+% ==============================================================================
+
+
+\end{document}

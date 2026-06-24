@@ -1,0 +1,1077 @@
+\documentclass[12pt,letterpaper]{article}
+
+% ── Paquetes ──────────────────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{mdframed}
+
+\geometry{margin=2.5cm}
+
+% ── Entornos ──────────────────────────────────────────────────────────────────
+\newtheoremstyle{ejercicio}
+  {10pt}{10pt}{\normalfont}{0pt}{\bfseries}{.}{.5em}{}
+\theoremstyle{ejercicio}
+\newtheorem{ejercicio}{Ejercicio}[section]
+
+\newtheoremstyle{solucion}
+  {6pt}{6pt}{\normalfont}{0pt}{\itshape}{.}{.5em}{}
+\theoremstyle{solucion}
+\newtheorem*{solucion}{Solución}
+
+\newmdenv[
+  linecolor=gray!60,
+  backgroundcolor=gray!6,
+  roundcorner=4pt,
+  innerleftmargin=10pt,
+  innerrightmargin=10pt,
+  innertopmargin=8pt,
+  innerbottommargin=8pt
+]{recuadro}
+
+% ── Macros ────────────────────────────────────────────────────────────────────
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\Ft}{\mathcal{F}_t}
+\newcommand{\BM}{(B_t)_{t\ge 0}}
+\newcommand{\Law}{\mathcal{L}}
+\newcommand{\iid}{\overset{\text{iid}}{\sim}}
+\newcommand{\dto}{\overset{d}{=}}
+\newcommand{\as}{\text{ c.s.}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+
+% ── Título ────────────────────────────────────────────────────────────────────
+\title{%
+  \textbf{Tarea-Examen: Movimiento Browniano}\\[4pt]
+  \large Soluciones — Secciones II y III (Ejercicios 1–22)\\
+  \normalsize Movimiento Browniano, Martingalas y Aplicaciones\\
+  Matemáticas Aplicadas y Computación
+}
+\author{}
+\date{}
+
+% ──────────────────────────────────────────────────────────────────────────────
+\begin{document}
+\maketitle
+
+
+
+% ==============================================================================
+\section{Propiedades fundamentales, regularidad y escalamiento (Ejercicios 1–12)}
+% ==============================================================================
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 1 — Covarianza y varianza del incremento}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Demuestre que para $0\le s\le t$,
+\[
+  \E[B_t B_s]=s=\min\{s,t\},\qquad
+  \Var(B_t-B_s)=t-s.
+\]
+Deduzca la matriz de covarianza de $(B_{t_1},\dots,B_{t_n})$.
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — Propiedad de control.}
+El movimiento browniano posee incrementos independientes y centrados:
+\[
+  B_t - B_s \perp \F_s,\qquad
+  B_t - B_s \sim \mathcal{N}(0,\,t-s).
+\]
+
+\textbf{Paso 2 — Cálculo de $\E[B_t B_s]$.}
+Escribimos $B_t = B_s + (B_t - B_s)$ y usamos la independencia:
+\begin{align*}
+  \E[B_t B_s]
+  &= \E\bigl[(B_s + (B_t-B_s))\,B_s\bigr]\\
+  &= \E[B_s^2] + \E[(B_t-B_s)]\,\E[B_s]\\
+  &= s + 0\cdot 0 = s.
+\end{align*}
+Como $0\le s\le t$, tenemos $\min\{s,t\}=s$, luego $\E[B_t B_s]=\min\{s,t\}$.
+
+\textbf{Paso 3 — Varianza del incremento.}
+\[
+  \Var(B_t-B_s) = \E[(B_t-B_s)^2] - (\E[B_t-B_s])^2 = (t-s) - 0 = t-s.
+\]
+
+\textbf{Paso 4 — Matriz de covarianza.}
+Sea $0\le t_1<\cdots<t_n$. Para $i\le j$,
+\[
+  \Cov(B_{t_i}, B_{t_j}) = \E[B_{t_i}B_{t_j}] = \min\{t_i,t_j\} = t_i.
+\]
+La matriz de covarianza es
+\[
+  \Gamma = \bigl(\Gamma_{ij}\bigr)_{1\le i,j\le n},
+  \qquad
+  \Gamma_{ij} = \min\{t_i,\,t_j\}.
+\]
+Explícitamente,
+\[
+  \Gamma =
+  \begin{pmatrix}
+    t_1 & t_1 & \cdots & t_1 \\
+    t_1 & t_2 & \cdots & t_2 \\
+    \vdots & & \ddots & \vdots \\
+    t_1 & t_2 & \cdots & t_n
+  \end{pmatrix}.
+\]
+Esta matriz es semidefinida positiva, lo cual es consistente con que
+$(B_{t_1},\dots,B_{t_n})$ sea un vector gaussiano.
+\end{solucion}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 2 — Incrementos independientes y ley finito-dimensional}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Sea $0<t_1<\cdots<t_n$. Demuestre que el vector de incrementos
+$(B_{t_1},\,B_{t_2}-B_{t_1},\,\ldots,\,B_{t_n}-B_{t_{n-1}})$
+tiene componentes gaussianas independientes, y reconstruya la ley finito-dimensional de
+$(B_{t_1},\ldots,B_{t_n})$.
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — Gaussianidad conjunta.}
+Por definición, el vector de incrementos
+\[
+  \Delta = \bigl(B_{t_1},\;B_{t_2}-B_{t_1},\;\ldots,\;B_{t_n}-B_{t_{n-1}}\bigr)
+\]
+es conjuntamente gaussiano: cada componente es gaussiana y el vector se obtiene por una
+transformación lineal del proceso browniano, que es gaussiano.
+
+\textbf{Paso 2 — Medias y covarianzas.}
+Cada componente tiene media cero: $\E[\Delta_k]=0$ para todo $k$.
+Para $k\ne \ell$ y $k<\ell$, el incremento $B_{t_\ell}-B_{t_{\ell-1}}$ es independiente de
+$\F_{t_{\ell-1}}\supset\sigma(\Delta_1,\dots,\Delta_k)$, por lo que
+\[
+  \Cov(\Delta_k,\Delta_\ell) = 0.
+\]
+
+\textbf{Paso 3 — Independencia.}
+En el caso gaussiano, covarianza nula implica independencia. Luego las componentes de $\Delta$
+son independientes. Más precisamente, $\Delta_k=B_{t_k}-B_{t_{k-1}}\sim\mathcal{N}(0,\,t_k-t_{k-1})$, con $t_0:=0$.
+
+\textbf{Paso 4 — Reconstrucción de la ley finito-dimensional.}
+El vector original se obtiene por transformación lineal triangular:
+\[
+  \begin{pmatrix}B_{t_1}\\ B_{t_2}\\ \vdots\\ B_{t_n}\end{pmatrix}
+  = L\,\Delta,
+  \qquad
+  L =
+  \begin{pmatrix}
+    1 & 0 & 0 &\cdots & 0\\
+    1 & 1 & 0 &\cdots & 0\\
+    \vdots &   & \ddots & & \vdots\\
+    1 & 1 & \cdots & 1 & 1
+  \end{pmatrix}.
+\]
+Como $L$ es determinista, $(B_{t_1},\dots,B_{t_n})$ es gaussiano con media cero y matriz de
+covarianza $\Gamma=L\,\mathrm{diag}(t_1-t_0,\,\ldots,\,t_n-t_{n-1})\,L^\top$,
+cuya entrada $(i,j)$ es $\min\{t_i,t_j\}$, consistente con el Ejercicio~1.
+Su densidad conjunta es
+\[
+  f(x_1,\dots,x_n)
+  = \prod_{k=1}^{n}
+    \frac{1}{\sqrt{2\pi(t_k-t_{k-1})}}
+    \exp\!\left(-\frac{(x_k-x_{k-1})^2}{2(t_k-t_{k-1})}\right),
+  \quad x_0:=0.
+\]
+\end{solucion}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 3 — Propiedad de escalamiento}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Pruebe que para todo $c>0$, el proceso
+$\tilde B_t := c^{-1}B_{c^2 t}$
+es un movimiento browniano estándar.
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — Continuidad.} Las trayectorias de $\tilde B$ son continuas (composición de
+funciones continuas) y $\tilde B_0 = c^{-1}B_0 = 0$.
+
+\textbf{Paso 2 — Incrementos gaussianos.}
+Para $0\le s\le t$,
+\[
+  \tilde B_t - \tilde B_s = c^{-1}(B_{c^2 t}-B_{c^2 s}).
+\]
+Como $B_{c^2 t}-B_{c^2 s}\sim\mathcal{N}(0,\,c^2(t-s))$ (por la definición del MB), se tiene
+\[
+  \tilde B_t - \tilde B_s \sim \mathcal{N}\!\left(0,\,\frac{c^2(t-s)}{c^2}\right)
+  = \mathcal{N}(0,\,t-s).
+\]
+
+\textbf{Paso 3 — Independencia de incrementos.}
+Para $0\le t_1<\cdots<t_n$, los tiempos reescalados $c^2 t_1<\cdots<c^2 t_n$ son distintos,
+y los incrementos $B_{c^2 t_k}-B_{c^2 t_{k-1}}$ son independientes por la propiedad del MB.
+Por tanto, los incrementos de $\tilde B$ también son independientes.
+
+\textbf{Ejemplo guía ($c=2$).}
+\[
+  \tilde B_t = \tfrac{1}{2}B_{4t},\quad
+  \tilde B_t-\tilde B_s = \tfrac{1}{2}(B_{4t}-B_{4s})\sim\mathcal{N}(0,t-s).\checkmark
+\]
+
+\textbf{Conclusión.} $\tilde B$ satisface las tres propiedades de definición del movimiento
+browniano estándar: valor inicial nulo, trayectorias continuas, incrementos independientes
+estacionarios gaussianos $\mathcal{N}(0,\Delta t)$.
+\end{solucion}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 4 — Inversión temporal}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Sea $X_t = t\,B_{1/t}$ para $t>0$ y $X_0:=0$. Demuestre que
+$(X_t)_{t\ge 0}$ es un movimiento browniano estándar.
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — Ley finito-dimensional.}
+Sea $0<t_1<\cdots<t_n$. El vector
+\[
+  (X_{t_1},\dots,X_{t_n}) = (t_1 B_{1/t_1},\dots,t_n B_{1/t_n})
+\]
+es una transformación lineal de $(B_{1/t_1},\dots,B_{1/t_n})$, que es gaussiano
+con medias cero. Su covarianza es
+\[
+  \Cov(X_s,X_t) = st\,\E\!\left[B_{1/s}B_{1/t}\right]
+  = st\cdot\min\!\left\{\tfrac{1}{s},\tfrac{1}{t}\right\}
+  = st\cdot\frac{1}{\max\{s,t\}} = \min\{s,t\}.
+\]
+Luego $(X_{t_1},\dots,X_{t_n})$ tiene la misma distribución que $(B_{t_1},\dots,B_{t_n})$.
+
+\textbf{Paso 2 — Continuidad en $t>0$.} Clara, pues $t\mapsto tB_{1/t}$ es continua para $t>0$.
+
+\textbf{Paso 3 — Continuidad en $t=0$: $X_t\to 0$ c.s. cuando $t\to 0^+$.}
+Por la ley del logaritmo iterado del MB,
+\[
+  \limsup_{u\to\infty}\frac{B_u}{\sqrt{2u\log\log u}} = 1\quad\as
+\]
+Poniendo $u=1/t$,
+\[
+  |X_t| = t\,|B_{1/t}| \le t\cdot C\sqrt{\frac{2}{t}\log\log\frac{1}{t}}
+         = C\sqrt{2t\log\log\frac{1}{t}} \xrightarrow{t\to 0^+} 0\quad\as
+\]
+
+\textbf{Conclusión.} $X$ tiene las mismas leyes finito-dimensionales que el MB, trayectorias
+continuas y $X_0=0$; por tanto es un movimiento browniano estándar. La interpretación es que
+el proceso $B$ y su inversión temporal $X_t=tB_{1/t}$ poseen la misma ley.
+\end{solucion}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 5 — El MB no es monótono en ningún intervalo}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Pruebe que con probabilidad uno el MB no es monótono en ningún
+intervalo no degenerado.
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — Reducción a rationales.}
+Es suficiente probar que, para cada par de racionales $q_1<q_2$, el evento
+$A_{q_1,q_2}:=\{B\text{ es no decreciente en }[q_1,q_2]\}$
+tiene probabilidad cero; análogamente para no creciente.
+La unión numerable $\bigcup_{q_1<q_2\in\mathbb{Q}}A_{q_1,q_2}$ cubre todos los intervalos racionales.
+
+\textbf{Paso 2 — Cálculo de $\P(A_{q_1,q_2})$.}
+Fijemos $[a,b]$ con $a<b$. Para una partición diádica $\{a=s_0<s_1<\cdots<s_n=b\}$
+con $n$ subintervalos iguales de longitud $\delta=(b-a)/n$,
+\[
+  A_{a,b} \subseteq \bigcap_{k=0}^{n-1}\{B_{s_{k+1}}-B_{s_k}\ge 0\}.
+\]
+Los eventos $\{B_{s_{k+1}}-B_{s_k}\ge 0\}$ son independientes, cada uno con probabilidad
+$1/2$. Luego
+\[
+  \P(A_{a,b}) \le \left(\frac{1}{2}\right)^n \xrightarrow{n\to\infty} 0.
+\]
+
+\textbf{Paso 3 — Conclusión.}
+$\P\!\left(\exists\,q_1<q_2\in\mathbb{Q}:\;B\text{ monótono en }[q_1,q_2]\right)
+\le \sum_{q_1<q_2\in\mathbb{Q}}\P(A_{q_1,q_2}) = 0$.
+
+Todo intervalo no degenerado contiene un subintervalo racional, lo que concluye la prueba.
+El MB es, por tanto, c.s. de variación no acotada en todo intervalo, consistente con su
+variación cuadrática no nula.
+\end{solucion}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 6 — Variación cuadrática}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Sea $\pi_n=\{k2^{-n}:0\le k\le n2^n\}$.
+Estudie $V_n:=\sum_{k=0}^{n2^n-1}(B_{(k+1)2^{-n}}-B_{k2^{-n}})^2$
+y pruebe que $V_n\to n$ en $L^2$ y en probabilidad.
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — Media de $V_n$.}
+Denotemos $\Delta_k = B_{(k+1)2^{-n}}-B_{k2^{-n}}\iid\mathcal{N}(0,2^{-n})$.
+\[
+  \E[V_n] = \sum_{k=0}^{n2^n-1}\E[\Delta_k^2]
+           = n2^n\cdot 2^{-n} = n.
+\]
+
+\textbf{Paso 2 — Varianza de $V_n$.}
+Como los incrementos son independientes y $\E[\Delta_k^4]=3(2^{-n})^2$,
+\begin{align*}
+  \Var(V_n)
+  &= \sum_{k=0}^{n2^n-1}\Var(\Delta_k^2)
+   = \sum_{k=0}^{n2^n-1}\bigl(\E[\Delta_k^4]-(\E[\Delta_k^2])^2\bigr)\\
+  &= n2^n\bigl(3\cdot 2^{-2n} - 2^{-2n}\bigr)
+   = n2^n\cdot 2\cdot 2^{-2n}
+   = \frac{2n}{2^n} \xrightarrow{n\to\infty} 0.
+\end{align*}
+
+\textbf{Paso 3 — Convergencia.}
+\[
+  \E\bigl[(V_n-n)^2\bigr] = \Var(V_n) = \frac{2n}{2^n}\to 0,
+\]
+lo que demuestra $V_n\xrightarrow{L^2} n$.
+La convergencia en probabilidad se sigue de la de $L^2$:
+\[
+  \P\!\left(|V_n-n|>\varepsilon\right)\le\frac{\Var(V_n)}{\varepsilon^2}
+  = \frac{2n}{\varepsilon^2\cdot 2^n}\to 0.
+\]
+
+\textbf{Interpretación.} Este resultado es la versión discreta de $[B]_t=t$: la variación
+cuadrática del MB en $[0,n]$ es exactamente $n$.
+\end{solucion}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 7 — Las trayectorias no son $\alpha$-Hölder para $\alpha>1/2$}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Pruebe que para todo $\alpha>1/2$, c.s. las trayectorias del MB
+no son $\alpha$-Hölder en ningún punto.
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — Definición y reducción.}
+Decimos que $B$ es $\alpha$-Hölder en $t_0$ si existe $C>0$ tal que
+$|B_t-B_{t_0}|\le C|t-t_0|^\alpha$ para $t$ cercano a $t_0$.
+Es suficiente probar que, para cada diádico $t_0=j2^{-m}$, la propiedad falla c.s.
+
+\textbf{Paso 2 — Incrementos diádicos.}
+Sea $\alpha>1/2$ y fijemos $\varepsilon>0$ tal que $\alpha>1/2+\varepsilon$.
+Para el incremento diádico en el $k$-ésimo subintervalo de nivel $n$,
+\[
+  \Delta_{n,k} := B_{(k+1)2^{-n}}-B_{k2^{-n}}\sim\mathcal{N}(0,2^{-n}).
+\]
+Si $B$ fuera $\alpha$-Hölder en algún punto $t_0\in[k2^{-n},(k+1)2^{-n}]$, entonces
+$|\Delta_{n,k}|\le C\cdot 2^{-n\alpha}$.
+
+\textbf{Paso 3 — Borel–Cantelli.}
+\begin{align*}
+  \P\!\left(|\Delta_{n,k}| > 2^{-n\alpha}\right)
+  &= 2\,\P\!\left(\mathcal{N}(0,1)>2^{-n(\alpha-1/2)}\right)\\
+  &\ge c\cdot 2^{n(\alpha-1/2)}\cdot \exp\!\left(-\tfrac{1}{2}\cdot 2^{-n(2\alpha-1)}\right)
+  \ge c\cdot 2^{-n\beta},
+\end{align*}
+para algún $\beta<1$ cuando $\alpha$ es solo ligeramente mayor que $1/2$.
+Más directamente, se puede mostrar que para $\alpha>1/2$,
+\[
+  \sum_{n=1}^\infty \P\!\left(\max_{0\le k<2^n}|\Delta_{n,k}| > n\cdot 2^{-n\alpha}\right)
+  < \infty,
+\]
+de modo que por Borel--Cantelli, eventualmente el máximo es menor que $n2^{-n\alpha}$.
+Sin embargo, si $B$ fuese $\alpha$-Hölder en $t_0$, el incremento en cada escala $n$ que
+contiene a $t_0$ satisfaría $|\Delta_{n,k}|\le C\cdot 2^{-n\alpha}$ para todo $n$ suficientemente
+grande. En escala $2^{-n}$ se tiene
+$\E[|\Delta_{n,k}|^2]=2^{-n}$, mientras que si $\alpha>1/2$
+entonces $2^{-n\alpha}\ll 2^{-n/2}$, lo que contradice el comportamiento típico de la gaussiana.
+
+\textbf{Conclusión.}
+Para todo $\alpha>1/2$, la probabilidad de que $B$ sea $\alpha$-Hölder en al menos un punto
+es cero. En cambio, las trayectorias son $(1/2-\varepsilon)$-Hölder para todo $\varepsilon>0$
+(teorema de Kolmogorov–Čentsov).
+\end{solucion}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 8 — El conjunto de ceros $Z=\{t\ge 0: B_t=0\}$}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Sea $Z:=\{t\ge 0:B_t=0\}$. Demuestre que $Z$ es cerrado y no
+acotado c.s. Discuta por qué esto es compatible con la continuidad de las trayectorias.
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — $Z$ es cerrado c.s.}
+$Z = B^{-1}(\{0\})$. Como $t\mapsto B_t$ es continua c.s. y $\{0\}$ es cerrado en $\R$,
+la preimagen $Z$ es cerrada c.s.
+
+\textbf{Paso 2 — $Z$ es no acotado c.s.}
+Por la ley del logaritmo iterado:
+\[
+  \limsup_{t\to\infty}\frac{B_t}{\sqrt{2t\log\log t}} = 1\quad\as,
+  \qquad
+  \liminf_{t\to\infty}\frac{B_t}{\sqrt{2t\log\log t}} = -1\quad\as
+\]
+Luego $B$ toma valores positivos y negativos infinitamente frecuentes para $t$ grande.
+Por la continuidad de las trayectorias y el teorema del valor intermedio, $B$ debe
+anularse en un instante arbitrariamente grande. Formalmente: para cada $T>0$,
+\[
+  \P\!\left(\exists\,t>T:\;B_t=0\right)=1.
+\]
+Esto implica que $\sup Z=+\infty$ c.s.
+
+\textbf{Paso 3 — Compatibilidad con la continuidad.}
+$Z$ es cerrado y no tiene interior (pues el MB no es monótono, Ejercicio~5).
+Es un conjunto de Cantor estocástico: cerrado, sin interior, perfecto y no numerable.
+La continuidad de $t\mapsto B_t$ implica que entre dos ceros consecutivos el proceso
+excursiona estrictamente por el semiplano positivo o negativo, creando la estructura
+de excursiones de Itô. No existe contradicción porque un conjunto cerrado de medida
+de Lebesgue cero puede ser no acotado (por ejemplo, $\{0,1,2,\dots\}$), y de hecho
+la medida de Lebesgue de $Z$ es cero c.s. (por la fórmula de ocupación y el tiempo local).
+\end{solucion}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 9 — Vectores gaussianos brownianos}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Sean $0\le s_1\le\cdots\le s_n$. Explique por qué
+$(B_{s_1},\dots,B_{s_n})$ tiene distribución normal conjunta.
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — Vector de incrementos independientes.}
+Definamos $\Delta_k = B_{s_k}-B_{s_{k-1}}$ con $s_0:=0$ y $\Delta_1:=B_{s_1}$.
+Por definición del MB, las variables $\Delta_1,\dots,\Delta_n$ son independientes con
+$\Delta_k\sim\mathcal{N}(0,\,s_k-s_{k-1})$; en particular, son gaussianas.
+
+\textbf{Paso 2 — Transformación lineal triangular.}
+El vector original se escribe como
+\[
+  \begin{pmatrix}B_{s_1}\\ B_{s_2}\\ \vdots\\ B_{s_n}\end{pmatrix}
+  = L
+  \begin{pmatrix}\Delta_1\\ \Delta_2\\ \vdots\\ \Delta_n\end{pmatrix},
+  \qquad
+  L_{ij} = \mathbf{1}_{j\le i}.
+\]
+$L$ es triangular inferior con unos en la diagonal y es determinista.
+
+\textbf{Paso 3 — Gaussianidad conjunta.}
+Una transformación lineal de un vector gaussiano es gaussiana. Por tanto
+$(B_{s_1},\dots,B_{s_n})$ es gaussiano conjunto con media cero y matriz de covarianza
+$\Gamma_{ij}=\Cov(B_{s_i},B_{s_j})=\min\{s_i,s_j\}$.
+
+\textbf{Ejemplo guía ($n=2$).}
+\[
+  (B_s,B_t) = \begin{pmatrix}1 & 0\\ 1 & 1\end{pmatrix}
+              \begin{pmatrix}B_s\\ B_t-B_s\end{pmatrix}.
+\]
+La covarianza es $\E[B_sB_t]=s=\min\{s,t\}$ para $s\le t$. \checkmark
+\end{solucion}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 10 — Covarianza, mgf e independencia gaussiana}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Sea $\Gamma$ la matriz de covarianza de $(B_{s_1},\dots,B_{s_n})$.
+Calcule $\Gamma$ y la función generadora de momentos. Explique por qué covarianza cero
+implica independencia en el caso gaussiano.
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — Cálculo de $\Gamma$.}
+Del Ejercicio~1, $\Gamma_{ij}=\min\{s_i,s_j\}$.
+
+\textbf{Paso 2 — Función generadora de momentos (mgf).}
+Para $\theta=(\theta_1,\dots,\theta_n)^\top\in\R^n$, siendo el vector gaussiano
+centrado con covarianza $\Gamma$:
+\[
+  f(\theta_1,\dots,\theta_n)
+  = \E\!\left[\exp\!\left(\sum_{i=1}^n\theta_i B_{s_i}\right)\right]
+  = \exp\!\left(\frac{1}{2}\,\theta^\top\Gamma\,\theta\right)
+  = \exp\!\left(\frac{1}{2}\sum_{i,j}\theta_i\,\theta_j\min\{s_i,s_j\}\right).
+\]
+
+\textbf{Paso 3 — Independencia gaussiana.}
+Si $\Gamma$ es diagonal, es decir, $\Cov(B_{s_i},B_{s_j})=0$ para $i\ne j$, entonces
+\[
+  \theta^\top\Gamma\,\theta = \sum_{i=1}^n\theta_i^2\,\Gamma_{ii},
+\]
+y la mgf factoriza:
+\[
+  f(\theta_1,\dots,\theta_n) = \prod_{i=1}^n\exp\!\left(\frac{\theta_i^2\,\Gamma_{ii}}{2}\right)
+  = \prod_{i=1}^n\E\!\left[e^{\theta_i B_{s_i}}\right].
+\]
+La factorización de la mgf conjunta implica la independencia de $B_{s_1},\dots,B_{s_n}$.
+En general, para un vector gaussiano centrado, covarianza nula equivale a independencia.
+
+\textbf{Ejemplo guía ($n=2$).}
+\[
+  f(\theta_1,\theta_2)
+  = \exp\!\left(\frac{\theta_1^2 s_1 + 2\theta_1\theta_2 s_1 + \theta_2^2 s_2}{2}\right)
+  \quad(s_1\le s_2).
+\]
+Si $s_1=0$, entonces $B_{s_1}=0$ es constante e independiente de todo lo demás.
+\end{solucion}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 11 — Dos brownianos independientes y encuentros}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Sean $X$, $Y$ dos MB estándar unidimensionales independientes.
+Muestre que $Z_t:=X_t-Y_t$ es un MB con varianza $2$. Discuta si
+$\{t\ge 0:X_t=Y_t\}$ es c.s. infinito.
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — Ley de $Z$.}
+\[
+  Z_t - Z_s = (X_t-X_s)-(Y_t-Y_s),\qquad 0\le s\le t.
+\]
+Los incrementos $X_t-X_s\sim\mathcal{N}(0,t-s)$ e $Y_t-Y_s\sim\mathcal{N}(0,t-s)$ son independientes, luego
+\[
+  Z_t-Z_s \sim\mathcal{N}(0,2(t-s)).
+\]
+Los incrementos de $Z$ en intervalos disjuntos son independientes (por la independencia de $X$ e $Y$).
+Las trayectorias de $Z$ son continuas y $Z_0=0$.
+Luego $Z$ es un MB con parámetro de varianza $\sigma^2=2$, equivalentemente $Z_t=\sqrt{2}\,\tilde B_t$
+donde $\tilde B$ es un MB estándar.
+
+\textbf{Paso 2 — El conjunto de encuentros $\{X_t=Y_t\}=\{Z_t=0\}$.}
+El conjunto $\{Z_t=0\}=\{t\ge 0:\tilde B_t=0\}$ es el conjunto de ceros de un MB estándar.
+Por el Ejercicio~8, este conjunto es c.s. no acotado. Luego hay infinitos tiempos de encuentro
+con probabilidad uno:
+\[
+  \P\!\left(\#\{t\ge 0:X_t=Y_t\}=\infty\right)=1.
+\]
+Esto es consistente con la recurrencia del MB unidimensional.
+\end{solucion}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 12 — Cambio de tiempo por niveles en dimensión dos}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Sea $X_t=(X^1_t,X^2_t)$ un MB bidimensional estándar y
+$\sigma_t:=\inf\{s\ge 0:(X^2_s)^2=t\}$, $Y_t:=X^1_{\sigma_t}$.
+Determine qué propiedades del MB satisface $Y$. Estudie además para qué $\lambda>0$
+el proceso $Z_t:=a^{-\lambda}Y_{at}$ tiene la misma ley que $Y$.
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — Estudio del cambio de tiempo $t\mapsto\sigma_t$.}
+El tiempo $\sigma_t$ es el primer instante en que $|X^2_s|=\sqrt{t}$, es decir,
+$\sigma_t=\tau_{\sqrt{t}}$ para el MB $X^2$. Por las propiedades del MB,
+$\sigma_t$ es un tiempo de paro finito c.s. (pues $X^2$ es recurrente) y la función
+$t\mapsto\sigma_t$ es no decreciente.
+
+\textbf{Paso 2 — Propiedades de $Y_t$.}
+Como $X^1$ y $X^2$ son independientes:
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Valor inicial}: $Y_0 = X^1_{\sigma_0} = X^1_0 = 0$.
+  \item \textbf{Continuidad}: $Y$ es continuo c.s. (herencia de $X^1$ y de la continuidad de $\sigma_t$).
+  \item \textbf{Incrementos}: $Y_t-Y_s = X^1_{\sigma_t}-X^1_{\sigma_s}$. Dado que
+        $X^2$ es independiente de $X^1$, y $\sigma_t$ depende solo de $X^2$,
+        los incrementos de $Y$ son condicional (e incondicionalmente) independientes
+        en intervalos disjuntos de $t$. Sin embargo, la distribución del incremento
+        depende de la distribución de $\sigma_t-\sigma_s$, que \emph{no} es $t-s$
+        en general. Por tanto, $Y$ \textbf{no} tiene incrementos estacionarios gaussianos
+        de varianza $\Delta t$.
+\end{itemize}
+
+\textbf{Paso 3 — Escalamiento.}
+Para encontrar $\lambda$ tal que $Z_t=a^{-\lambda}Y_{at}\dto Y_t$, usamos que
+$Y_{at}=X^1_{\sigma_{at}}$ y $\sigma_{at}\dto a\,\sigma_t$ (pues la densidad de
+$\tau_{\sqrt{t}}$ para el MB es la ley de Lévy con escala $t$, cuya distribución escala
+como $a\cdot\sigma_t$ al sustituir $t\mapsto at$). Luego por el escalamiento del MB,
+$X^1_{\sigma_{at}}\dto\sqrt{a}\,X^1_{\sigma_t}$, de donde
+\[
+  Z_t = a^{-\lambda}Y_{at} \dto a^{-\lambda}\cdot\sqrt{a}\cdot Y_t = a^{1/2-\lambda}Y_t.
+\]
+Para que $Z\dto Y$ se requiere $a^{1/2-\lambda}=1$, es decir $\lambda=\tfrac{1}{2}$.
+
+\textbf{Conclusión.} $Y$ es continuo, centrado en cero, con incrementos independientes pero
+no estacionarios (en varianza). El exponente de Hurst natural es $\lambda=1/2$.
+\end{solucion}
+
+% ==============================================================================
+\newpage
+\section{Propiedad de Markov, reflexión y distribuciones explícitas (Ejercicios 13–22)}
+% ==============================================================================
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 13 — Propiedad de Markov simple}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Demuestre la propiedad de Markov simple:
+\[
+  \E[f(B_t)\mid\F_s] = P_{t-s}f(B_s),\quad 0\le s\le t,
+\]
+para toda $f$ boreliana acotada, donde $P_t f(x)=\int_{\R}f(y)\,p_t(x,y)\,dy$ y
+$p_t(x,y)=(2\pi t)^{-1/2}e^{-(y-x)^2/(2t)}$.
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — Descomposición del incremento.}
+Escribimos $B_t = B_s + (B_t-B_s)$. El incremento $\xi:=B_t-B_s\sim\mathcal{N}(0,t-s)$
+es independiente de $\F_s$.
+
+\textbf{Paso 2 — Cálculo de la esperanza condicional.}
+Para $f$ boreliana acotada:
+\begin{align*}
+  \E[f(B_t)\mid\F_s]
+  &= \E[f(B_s+\xi)\mid\F_s]\\
+  &= \int_{\R}f(B_s+z)\,\frac{1}{\sqrt{2\pi(t-s)}}e^{-z^2/(2(t-s))}\,dz
+     \qquad(\text{$\xi$ independiente de }\F_s)\\
+  &= \int_{\R}f(y)\,\frac{1}{\sqrt{2\pi(t-s)}}e^{-(y-B_s)^2/(2(t-s))}\,dy\\
+  &= P_{t-s}f(B_s).
+\end{align*}
+
+\textbf{Formulación equivalente (función armónica).}
+Si $h$ es armónica en un dominio $D\subset\R^d$ y $\tau_D$ es el tiempo de salida del
+MB de $D$, entonces $h(B_{t\wedge\tau_D})$ es una martingala y
+$h(x)=\E^x[h(B_{\tau_D})]$, que es una consecuencia directa de la propiedad de Markov.
+\end{solucion}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 14 — Principio de reflexión y el máximo}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Sea $\tau_a:=\inf\{t\ge 0:B_t=a\}$, $a>0$. Use el principio de
+reflexión para probar que
+\[
+  \P\!\left(\sup_{0\le u\le t}B_u\ge a\right)=2\P(B_t\ge a).
+\]
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — Descomposición del evento.}
+\[
+  \left\{\sup_{0\le u\le t}B_u\ge a\right\}
+  = \{\tau_a\le t\}.
+\]
+Descomponemos según el signo de $B_t$ al tiempo $t$:
+\begin{align*}
+  \P(\tau_a\le t)
+  &= \P(\tau_a\le t,\;B_t\ge a)+\P(\tau_a\le t,\;B_t<a).
+\end{align*}
+
+\textbf{Paso 2 — Principio de reflexión.}
+En el evento $\{\tau_a\le t,\;B_t<a\}$, la trayectoria tocó el nivel $a$ en algún instante
+$\tau_a\le t$ y luego bajó. Definamos el proceso reflejado
+\[
+  \hat{B}_u :=
+  \begin{cases}
+    B_u & u\le\tau_a,\\
+    2a - B_u & u>\tau_a.
+  \end{cases}
+\]
+Por la propiedad de Markov fuerte en $\tau_a$ y la simetría $B\dto -B$ del MB,
+$\hat{B}$ es también un MB estándar. Tenemos
+\[
+  \hat{B}_t > a \iff B_t < a \quad\text{en el evento }\{\tau_a\le t\}.
+\]
+Luego $\P(\tau_a\le t,\;B_t<a)=\P(\tau_a\le t,\;\hat{B}_t>a)=\P(\tau_a\le t,\;B_t>a)$.
+
+\textbf{Paso 3 — Conclusión.}
+Dado que $\{B_t\ge a\}\subseteq\{\tau_a\le t\}$ (si $B_t\ge a$ el proceso ya cruzó $a$):
+\begin{align*}
+  \P(\tau_a\le t)
+  &= \P(\tau_a\le t,\;B_t\ge a)+\P(\tau_a\le t,\;B_t<a)\\
+  &= \P(B_t\ge a)+\P(B_t>a)\\
+  &= 2\P(B_t\ge a),
+\end{align*}
+donde hemos usado que $\P(B_t=a)=0$ para la continuidad.
+\end{solucion}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 15 — Densidad del tiempo de llegada $\tau_a$}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Deduzca del ejercicio anterior la densidad
+\[
+  \P(\tau_a\in dt)=\frac{a}{\sqrt{2\pi t^3}}\,e^{-a^2/(2t)}\,dt,\quad t>0.
+\]
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — Función de distribución de $\tau_a$.}
+Del Ejercicio~14,
+\[
+  \P(\tau_a\le t) = 2\P(B_t\ge a)
+  = 2\int_a^\infty \frac{1}{\sqrt{2\pi t}}\,e^{-x^2/(2t)}\,dx
+  = 2\left[1-\Phi\!\left(\frac{a}{\sqrt{t}}\right)\right],
+\]
+donde $\Phi$ es la función de distribución normal estándar.
+
+\textbf{Paso 2 — Derivación de la densidad.}
+Derivamos respecto de $t$. Usando la regla de la cadena con $u=a/\sqrt{t}$:
+\begin{align*}
+  f_{\tau_a}(t)
+  &= \frac{d}{dt}\,2\bigl[1-\Phi(a/\sqrt{t})\bigr]
+   = -2\,\phi\!\left(\frac{a}{\sqrt{t}}\right)\cdot\frac{d}{dt}\frac{a}{\sqrt{t}}\\
+  &= -2\cdot\frac{1}{\sqrt{2\pi}}\,e^{-a^2/(2t)}\cdot\left(-\frac{a}{2t^{3/2}}\right)\\
+  &= \frac{a}{\sqrt{2\pi}\,t^{3/2}}\,e^{-a^2/(2t)}
+   = \frac{a}{\sqrt{2\pi t^3}}\,e^{-a^2/(2t)}.
+\end{align*}
+
+\textbf{Verificación.} Esta es la densidad de una ley de Lévy con parámetros $\mu=0$,
+$c=a^2$. En particular, $\E[\tau_a]=+\infty$ (colas pesadas de orden $t^{-3/2}$).
+Se puede verificar que $\int_0^\infty f_{\tau_a}(t)\,dt=1$ por el cambio $u=a^2/(2t)$.
+\end{solucion}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 16 — Distribución del máximo $M_t=\sup_{0\le s\le t}B_s$}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Pruebe que $M_t\dto|B_t|$. Calcule $\E[M_t]$ y $\Var(M_t)$.
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — Distribución de $M_t$.}
+Del Ejercicio~14, para $a>0$:
+\[
+  \P(M_t\ge a) = \P\!\left(\sup_{s\le t}B_s\ge a\right) = 2\P(B_t\ge a) = \P(|B_t|\ge a),
+\]
+donde la última igualdad usa $\P(B_t\ge a)=\P(-B_t\ge a)$ (simetría) y
+$\P(|B_t|\ge a)=2\P(B_t\ge a)$ (ambas se cancelan). Luego $M_t\dto|B_t|$.
+
+La densidad de $M_t$ es, para $a>0$:
+\[
+  f_{M_t}(a) = \frac{d}{da}\P(M_t\le a) = \frac{d}{da}[2\Phi(a/\sqrt{t})-1]
+  = \frac{2}{\sqrt{2\pi t}}\,e^{-a^2/(2t)},\quad a>0.
+\]
+
+\textbf{Paso 2 — Media de $M_t$.}
+$M_t\dto|B_t|\sim|\mathcal{N}(0,t)|$, cuya media es
+\[
+  \E[M_t] = \E[|B_t|] = \sqrt{\frac{2t}{\pi}}.
+\]
+Verificación directa: $\int_0^\infty a\cdot\frac{2}{\sqrt{2\pi t}}e^{-a^2/(2t)}da
+= \sqrt{\frac{2t}{\pi}}$.
+
+\textbf{Paso 3 — Varianza de $M_t$.}
+\[
+  \E[M_t^2] = \E[B_t^2] = t.
+\]
+\[
+  \Var(M_t) = \E[M_t^2]-(\E[M_t])^2 = t - \frac{2t}{\pi} = t\left(1-\frac{2}{\pi}\right).
+\]
+\end{solucion}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 17 — Probabilidad de ruina $\P(\tau_a<\tau_{-b})$}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Calcule, para $a,b>0$,
+$\P(\tau_a<\tau_{-b})$
+e interprételo como versión continua del problema de la ruina del jugador.
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — Planteamiento martingala.}
+Sea $\tau=\tau_a\wedge\tau_{-b}$. Como $B_t$ es una martingala y $\tau$ es un tiempo de paro
+acotado ($\tau\le\tau_a\wedge\tau_{-b}$, que es finito c.s. porque el MB es recurrente), el
+teorema de parada opcional da:
+\[
+  \E[B_\tau] = B_0 = 0.
+\]
+En $\{\tau_a<\tau_{-b}\}$, $B_\tau=a$; en $\{\tau_{-b}<\tau_a\}$, $B_\tau=-b$. Luego:
+\[
+  0 = a\cdot\P(\tau_a<\tau_{-b}) + (-b)\cdot\P(\tau_{-b}<\tau_a).
+\]
+Como $\P(\tau_{-b}<\tau_a)=1-\P(\tau_a<\tau_{-b})$:
+\[
+  0 = a\,p - b\,(1-p),\quad p=\P(\tau_a<\tau_{-b}).
+\]
+
+\textbf{Paso 2 — Solución.}
+\[
+  \boxed{\P(\tau_a<\tau_{-b}) = \frac{b}{a+b}.}
+\]
+
+\textbf{Interpretación.}
+Este es el análogo continuo del problema de la ruina: un jugador que empieza con capital $0$
+(entre la ruina $-b$ y la ganancia $a$) tiene probabilidad $b/(a+b)$ de ganar. A diferencia del
+caso de la caminata aleatoria con sesgo, aquí el resultado es independiente de la velocidad
+(pues el MB no tiene deriva) y solo depende de las distancias $a$ y $b$ a las barreras.
+\end{solucion}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 18 — Ecuación de Dirichlet y salida del intervalo $(a,b)$}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Sea $g(x):=P^x(\tau_b<\tau_a)$ con $a<x<b$.
+Muestre que $g$ satisface una ecuación de Dirichlet y resuélvala.
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — Ecuación de Dirichlet.}
+Sea $\tau=\tau_a\wedge\tau_b$. El proceso $g(B_{t\wedge\tau})$ es una martingala
+(pues $g$ debe ser harmónica en $(a,b)$). Por la propiedad de Markov y la fórmula de Itô:
+\[
+  dg(B_t) = g'(B_t)\,dB_t + \frac{1}{2}g''(B_t)\,dt.
+\]
+Para que $g(B_{t\wedge\tau})$ sea martingala, el término de deriva debe anularse:
+\[
+  \frac{1}{2}g''(x) = 0,\quad x\in(a,b),
+\]
+con condiciones de frontera $g(a)=0$ y $g(b)=1$.
+
+\textbf{Paso 2 — Solución.}
+$g''=0$ implica $g(x)=\alpha x+\beta$ (función afín). Aplicando las condiciones de frontera:
+\[
+  \alpha a+\beta = 0,\quad \alpha b+\beta=1.
+\]
+Restando: $\alpha(b-a)=1\implies\alpha=\frac{1}{b-a}$. Luego $\beta=-\frac{a}{b-a}$.
+\[
+  \boxed{g(x) = P^x(\tau_b<\tau_a) = \frac{x-a}{b-a},\quad a\le x\le b.}
+\]
+Consistentemente, $g(a)=0$, $g(b)=1$ y la fórmula es creciente en $x$.
+Como caso especial, con $a=0$ y $x=0$: $g(0)=\P^0(\tau_b<\tau_0)=0$ (reflexión en 0).
+\end{solucion}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 19 — Distribución del supremo hasta el tiempo de salida de $(-1,1)$}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Sea $T:=\inf\{t\ge 0:|B_t|=1\}$. Calcule la distribución de
+$\sup_{0\le s\le T}B_s$.
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — Identificación del evento.}
+Sea $M:=\sup_{0\le s\le T}B_s$. Para $0\le c\le 1$, el evento $\{M\ge c\}$ ocurre si y solo si
+el MB llega al nivel $c$ antes de salir de $(-1,1)$, lo cual incluye la posibilidad de llegar
+a $1$ (que es la salida superior).
+
+\textbf{Paso 2 — Probabilidad de cruce.}
+Para $0\le c\le 1$, el MB parte de $0$ dentro del intervalo $(-1,1)$.
+La probabilidad de alcanzar el nivel $c\in(0,1]$ antes de $-1$ es, por el Ejercicio~18
+con $a=-1$ y $b=c$:
+\[
+  P^0(\tau_c<\tau_{-1}) = \frac{0-(-1)}{c-(-1)} = \frac{1}{1+c}.
+\]
+Dado que $M\ge c$ si y solo si el proceso alcanza $c$ antes de ser absorbido en $-1$
+(notar que alcanzar $1$ también implica $M\ge c$ para $c\le 1$), hay que distinguir casos:
+
+\begin{itemize}
+  \item Si $c=1$: $\P(M\ge 1)=\P(B_T=1)$.
+  \item Para $0<c<1$: $\{M\ge c\}$ ocurre si $\tau_c<\tau_{-1}$, lo cual incluye
+        llegar luego a $1$.
+\end{itemize}
+Más precisamente, $\P(M\ge c)$ es la probabilidad de cruzar $c$ antes que $-1$:
+\[
+  \P(M\ge c) = P^0(\tau_c<\tau_{-1}) = \frac{1}{1+c},\quad 0<c\le 1.
+\]
+Verificación: $\P(M\ge 0)=1$ (trivialmente, pues $B_0=0$) y $\P(M\ge 1)=1/2$ (por simetría,
+la probabilidad de salir por $1$ es $1/2$).
+
+\textbf{Paso 3 — Densidad.}
+\[
+  \P(M\le c) = 1 - \frac{1}{1+c},\quad c\in(0,1].
+\]
+\[
+  f_M(c) = \frac{d}{dc}\left(1-\frac{1}{1+c}\right) = \frac{1}{(1+c)^2},\quad c\in(0,1].
+\]
+\end{solucion}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 20 — Ley de $(M_t-B_t, M_t)$ y reflexión}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Demuestre (o establezca una versión parcial) de que la ley de
+$(M_t-B_t,\,M_t)$ coincide con la de $(|B_t|,\,L^0_t)$.
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Versión parcial: identificación marginal de $M_t-B_t$.}
+
+\textbf{Paso 1 — Distribución de $M_t-B_t$.}
+Para $x>0$:
+\begin{align*}
+  \P(M_t-B_t>x)
+  &= \P(M_t>B_t+x).
+\end{align*}
+Condicionando sobre el valor de $B_t=y$:
+\[
+  \P(M_t-B_t>x) = \int_{-\infty}^\infty \P(M_t>y+x\mid B_t=y)\,f_{B_t}(y)\,dy.
+\]
+Usando reflexión: $\P(M_t>y+x\mid B_t=y)=\P(M_t>y+x,B_t=y)/\P(B_t=y)$, que por el
+principio de reflexión resulta en
+\[
+  \P(M_t-B_t>x)=\P(|B_t|>x)=2\P(B_t>x),\quad x>0.
+\]
+Esto muestra $M_t-B_t\dto|B_t|$.
+
+\textbf{Paso 2 — Identidad de Lévy (resultado completo).}
+La identidad completa $(M_t-B_t,M_t)\dto(|B_t|,L^0_t)$ es la \textbf{identidad de Lévy},
+donde $L^0_t$ es el tiempo local en $0$ hasta $t$. Esta identidad se prueba usando la
+fórmula de Tanaka $|B_t|=\int_0^t\text{sgn}(B_s)dB_s+L^0_t$ y mostrando que el par
+$(|B_t|,L^0_t)$ satisface la misma ecuación que $(M_t-B_t,M_t)$ vía la reflexión de Skorokhod.
+En particular, $L^0_t\dto M_t$ en distribución marginal.
+\end{solucion}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 21 — Probabilidades de signo: $\P(B_2>0\mid B_1>0)$}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Calcule $\P(B_2>0\mid B_1>0)$ y discuta si $\{B_1>0\}$ y
+$\{B_2>0\}$ son independientes.
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — Descomposición.}
+$B_2 = B_1 + (B_2-B_1)$, donde $B_2-B_1\sim\mathcal{N}(0,1)$ es independiente de $B_1$.
+
+\textbf{Paso 2 — Cálculo.}
+\begin{align*}
+  \P(B_2>0,\,B_1>0)
+  &= \P(B_1+(B_2-B_1)>0,\,B_1>0)\\
+  &= \int_0^\infty\P(B_2-B_1>-y)\,\frac{1}{\sqrt{2\pi}}e^{-y^2/2}\,dy\\
+  &= \int_0^\infty\Phi(y)\,\frac{1}{\sqrt{2\pi}}e^{-y^2/2}\,dy.
+\end{align*}
+Por simetría y usando que $(B_1,B_2-B_1)$ son independientes estándar, calculamos la
+probabilidad de que ambas coordenadas del vector gaussiano $(B_1,B_2)$ sean positivas.
+La correlación entre $B_1$ y $B_2$ es $\rho=1/\sqrt{2}$:
+\[
+  \P(B_1>0,\,B_2>0) = \frac{1}{4}+\frac{1}{2\pi}\arcsin(\rho)
+  = \frac{1}{4}+\frac{1}{2\pi}\cdot\frac{\pi}{4}=\frac{1}{4}+\frac{1}{8}=\frac{3}{8}.
+\]
+Luego,
+\[
+  \P(B_2>0\mid B_1>0) = \frac{\P(B_2>0,\,B_1>0)}{\P(B_1>0)} = \frac{3/8}{1/2} = \frac{3}{4}.
+\]
+
+\textbf{Paso 3 — Independencia.}
+$\P(B_1>0)\cdot\P(B_2>0) = \frac{1}{2}\cdot\frac{1}{2}=\frac{1}{4}\ne\frac{3}{8}$.
+Por tanto, $\{B_1>0\}$ y $\{B_2>0\}$ \textbf{no son independientes}; están positivamente
+correlacionados, pues el MB tiene memoria (su variación cuadrática es finita).
+\end{solucion}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 22 — Máximo browniano en tiempo 1}
+% ─────────────────────────────────────────────────────────────────────────────
+
+\begin{recuadro}
+\textbf{Enunciado.} Sea $M:=\max\{B_t:0\le t\le 1\}$. Encuentre la densidad de $M$
+y calcule $\E[M]$ y $\Var(M)$.
+\end{recuadro}
+
+\begin{solucion}
+
+\textbf{Paso 1 — Función de distribución.}
+Para $x>0$, por el principio de reflexión (Ejercicio~14 con $t=1$):
+\[
+  \P(M\ge x) = 2\P(B_1\ge x).
+\]
+Luego $\P(M\le x) = 1-2\P(B_1\ge x) = 2\Phi(x)-1$, donde $\Phi$ es la CDF normal estándar.
+
+\textbf{Paso 2 — Densidad.}
+\[
+  f_M(x) = \frac{d}{dx}[2\Phi(x)-1] = 2\phi(x) = \sqrt{\frac{2}{\pi}}\,e^{-x^2/2},
+  \quad x>0.
+\]
+Esta es la densidad de $|B_1|$, consistente con $M\dto|B_1|$ del Ejercicio~16.
+
+\textbf{Paso 3 — Media.}
+\[
+  \E[M] = \int_0^\infty x\cdot\sqrt{\frac{2}{\pi}}\,e^{-x^2/2}\,dx
+  = \sqrt{\frac{2}{\pi}}\left[-e^{-x^2/2}\right]_0^\infty
+  = \sqrt{\frac{2}{\pi}}.
+\]
+
+\textbf{Paso 4 — Varianza.}
+\[
+  \E[M^2] = \int_0^\infty x^2\cdot\sqrt{\frac{2}{\pi}}\,e^{-x^2/2}\,dx
+  = \E[B_1^2] = 1.
+\]
+\[
+  \Var(M) = \E[M^2]-(\E[M])^2 = 1-\frac{2}{\pi} = \frac{\pi-2}{\pi}\approx 0.363.
+\]
+\end{solucion}
+
+% ──────────────────────────────────────────────────────────────────────────────
+\newpage
+\appendix
+\section*{Tabla de resultados principales}
+\addcontentsline{toc}{section}{Tabla de resultados principales}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{|c|l|}
+\hline
+\textbf{Objeto} & \textbf{Resultado} \\
+\hline
+$\Cov(B_s,B_t)$ & $\min\{s,t\}$ \\
+$\Var(B_t-B_s)$ & $t-s$ \\
+Escala $\tilde B_t=c^{-1}B_{c^2t}$ & MB estándar \\
+Inversión $X_t=tB_{1/t}$ & MB estándar \\
+$V_n\to$ & $n$ en $L^2$ \\
+$[B]_t$ & $t$ (c.s.) \\
+$\P(\sup_{s\le t}B_s\ge a)$ & $2\P(B_t\ge a)=2(1-\Phi(a/\sqrt{t}))$ \\
+$f_{\tau_a}(t)$ & $\dfrac{a}{\sqrt{2\pi t^3}}e^{-a^2/(2t)}$ \\
+$M_t=\sup_{s\le t}B_s$ & $M_t\dto|B_t|$, $\E[M_t]=\sqrt{2t/\pi}$, $\Var=t(1-2/\pi)$ \\
+$\P(\tau_a<\tau_{-b})$ & $b/(a+b)$ \\
+$P^x(\tau_b<\tau_a)$ & $(x-a)/(b-a)$ \\
+$\P(B_2>0|B_1>0)$ & $3/4$ \\
+$\E[M]$, $M=\max_{[0,1]}B$ & $\sqrt{2/\pi}$ \\
+$\Var(M)$ & $(\pi-2)/\pi$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\bigskip
+\noindent\textbf{Convenciones.} $\Phi(x)=\P(\mathcal{N}(0,1)\le x)$,
+$\phi(x)=(2\pi)^{-1/2}e^{-x^2/2}$.
+Todos los resultados son para $(B_t)_{t\ge 0}$ movimiento browniano estándar partiendo de $0$.
+
+\end{document}

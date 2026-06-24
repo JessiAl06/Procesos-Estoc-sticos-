@@ -1,0 +1,310 @@
+\documentclass[12pt,letterpaper]{article}
+
+% ── Paquetes ──────────────────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{mdframed}
+
+\geometry{margin=2.5cm}
+
+% ── Entornos ──────────────────────────────────────────────────────────────────
+\newtheoremstyle{ejercicio}
+  {10pt}{10pt}{\normalfont}{0pt}{\bfseries}{.}{.5em}{}
+\theoremstyle{ejercicio}
+\newtheorem{ejercicio}{Ejercicio}[section]
+
+\newtheoremstyle{solucion}
+  {6pt}{6pt}{\normalfont}{0pt}{\itshape}{.}{.5em}{}
+\theoremstyle{solucion}
+\newtheorem*{solucion}{Solución}
+
+\newmdenv[
+  linecolor=gray!60,
+  backgroundcolor=gray!6,
+  roundcorner=4pt,
+  innerleftmargin=10pt,
+  innerrightmargin=10pt,
+  innertopmargin=8pt,
+  innerbottommargin=8pt
+]{recuadro}
+
+% ── Macros ────────────────────────────────────────────────────────────────────
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\Ft}{\mathcal{F}_t}
+\newcommand{\BM}{(B_t)_{t\ge 0}}
+\newcommand{\Law}{\mathcal{L}}
+\newcommand{\iid}{\overset{\text{iid}}{\sim}}
+\newcommand{\dto}{\overset{d}{=}}
+\newcommand{\as}{\text{ c.s.}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+
+% ── Título ────────────────────────────────────────────────────────────────────
+\title{%
+  \textbf{Tarea-Examen: Movimiento Browniano}\\[4pt]
+  \large Soluciones — Secciones II y III (Ejercicios 1–22)\\
+  \normalsize Movimiento Browniano, Martingalas y Aplicaciones\\
+  Matemáticas Aplicadas y Computación
+}
+\author{}
+\date{}
+
+% ──────────────────────────────────────────────────────────────────────────────
+\begin{document}
+\maketitle
+
+
+
+% ==============================================================================
+
+% ==============================================================================
+
+\section{Tiempos de paro — continuación (Ejercicios 35--45)}
+% ==============================================================================
+
+%─── Ejercicio 35 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 35 — Tiempo de salida de $(-a,b)$}
+
+\begin{recuadro}
+Sea $\tau:=\inf\{t\ge 0:B_t\notin(-a,b)\}$, $a,b>0$. Calcule $\E[\tau]$ y la ley de $B_\tau$.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{Ley de $B_\tau$.} Por la propiedad martingala de $B$ y parada opcional:
+$0=\E[B_\tau]=b\,\P(B_\tau=b)+(-a)\,\P(B_\tau=-a)$.
+Con $\P(B_\tau=b)+\P(B_\tau=-a)=1$:
+\[
+  \P(B_\tau=b)=\frac{a}{a+b},\qquad \P(B_\tau=-a)=\frac{b}{a+b}.
+\]
+\textbf{$\E[\tau]$.} La martingala $B_t^2-t$ y parada opcional dan $\E[B_\tau^2]=\E[\tau]$, luego
+\[
+  \E[\tau]=b^2\cdot\frac{a}{a+b}+a^2\cdot\frac{b}{a+b}=ab.
+\]
+Para $a=b$: $\E[\tau]=a^2$, consistente con la escala difusiva del MB.
+\end{solucion}
+
+%─── Ejercicio 36 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 36 — $\tau_a<\infty$ c.s.\ pero $\E[\tau_a]=\infty$}
+
+\begin{recuadro}
+Pruebe que $\tau_a<\infty$ c.s.\ para todo $a\in\R$, pero $\E[\tau_a]=\infty$.
+Reconcilie con el Ejercicio~35.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{$\tau_a<\infty$ c.s.} Por recurrencia del MB: $\limsup B_t=+\infty$ y
+$\liminf B_t=-\infty$ c.s., luego por continuidad el MB alcanza todo nivel $a\in\R$.
+
+\textbf{$\E[\tau_a]=\infty$.} La densidad del Ejercicio~15 es $f_{\tau_a}(t)\sim|a|(2\pi)^{-1/2}t^{-3/2}$
+para $t\to\infty$. Luego $\int_1^\infty t\cdot t^{-3/2}\,dt=\int_1^\infty t^{-1/2}\,dt=\infty$.
+
+\textbf{Reconciliación.} En el Ejercicio~35 la barrera inferior $-a$ trunca las excursiones largas
+(cola exponencial del tiempo de salida), mientras que con una sola barrera la cola es $t^{-3/2}$,
+no integrable.
+\end{solucion}
+
+%─── Ejercicio 37 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 37 — Tiempo de llegada con deriva: $T_c=\inf\{t:B_t-ct=1\}$}
+
+\begin{recuadro}
+Discuta cuándo $T_c<\infty$ c.s.\ y cuándo $\E[T_c]<\infty$.
+\end{recuadro}
+
+\begin{solucion}
+Sea $X_t:=B_t-ct$. Es un MB con deriva $-c$.
+\begin{itemize}[leftmargin=*]
+\item $c\le 0$: $X_t\to+\infty$ c.s., luego $T_c<\infty$ c.s.
+\item $c>0$: $X_t\to-\infty$ c.s. La martingala exponencial $e^{2cX_t}$ y parada opcional dan
+  $\P(T_c<\infty)=e^{-2c}<1$.
+\end{itemize}
+Para la media: si $c<0$, la transformada de Laplace $\E[e^{-\lambda T_c}]=e^{-({\sqrt{c^2+2\lambda}+c})}$
+implica $\E[T_c]=1/|c|<\infty$; si $c=0$, $\E[T_0]=+\infty$ (ley de Lévy).
+
+\textbf{Conclusión.} $T_c<\infty$ c.s.\ $\iff c\le 0$. $\E[T_c]<\infty\iff c<0$.
+\end{solucion}
+
+%─── Ejercicio 38 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 38 — $\sigma=\inf\{t:tB_t=1\}$ e inversión temporal}
+
+\begin{recuadro}
+Use inversión temporal para relacionar $\sigma$ con un tiempo de llegada ordinario.
+\end{recuadro}
+
+\begin{solucion}
+Con $X_u:=uB_{1/u}$ (MB por inversión, Ejercicio~4) y el cambio $u=1/t$:
+\[
+  tB_t=1\iff B_{1/u}=u\iff X_u/u=u^2/u\iff \tilde B_u=u^2\quad\text{(formalmente)},
+\]
+donde $\tilde B$ es MB estándar. Luego
+$\sigma=(\inf\{u>0:\tilde B_u=u^2\})^{-1}$: primer cruce de la curva parabólica $u\mapsto u^2$.
+Por escalamiento del MB, $\sigma$ no tiene media finita.
+\end{solucion}
+
+%─── Ejercicio 39 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 39 — Ley de $M_t-m_t$}
+
+\begin{recuadro}
+Sean $M_t=\sup_{s\le t}B_s$ y $m_t=\inf_{s\le t}B_s$. Obtenga la ley de $M_t-m_t$
+o cotas explícitas.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{Escala.} $M_t-m_t\dto\sqrt{t}(M_1-m_1)$ por escalamiento.
+
+\textbf{Momentos.} $\E[M_t-m_t]=2\E[M_t]=2\sqrt{2t/\pi}$.
+Con $\E[M_t^2]=\E[m_t^2]=t$ y $\E[M_t m_t]=-t/2$:
+\[
+  \E[(M_t-m_t)^2]=\E[M_t^2]+\E[m_t^2]-2\E[M_t m_t]=t+t+t=3t.
+\]
+
+\textbf{Cotas.} $2\sqrt{2t/\pi}\le\E[M_t-m_t]\le\sqrt{3t}$ (Jensen).
+
+\textbf{Distribución.} Para $x>0$, la distribución exacta de $R_t:=M_t-m_t$ es (Feller):
+\[
+  \P(R_t\le x)=\sum_{k=-\infty}^{\infty}(-1)^k\Bigl[\Phi\!\Bigl(\tfrac{(2k+1)x}{\sqrt{t}}\Bigr)
+  -\Phi\!\Bigl(\tfrac{(2k-1)x}{\sqrt{t}}\Bigr)\Bigr].
+\]
+\end{solucion}
+
+%─── Ejercicio 40 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 40 — Estimación de Cramér–Lundberg}
+
+\begin{recuadro}
+Demuestre que para $a,c>0$,
+$\P(\sup_{s\ge 0}(B_s-cs)\ge a)=e^{-2ca}$.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{Martingala exponencial.} Para $\theta=2c$, $e^{2cB_t-2c^2t}=e^{2c(B_t-ct)}$
+es martingala positiva de media $1$.
+
+\textbf{Parada opcional.} Sea $\tau:=\inf\{t:B_t-ct=a\}$.
+En $\{\tau<\infty\}$: $e^{2c\cdot a}$; en $\{\tau=\infty\}$: $e^{2c(B_t-ct)}\to 0$.
+\[
+  1=\E[e^{2c(B_\tau-c\tau)}]=e^{2ca}\cdot\P(\tau<\infty)+0\cdot\P(\tau=\infty).
+\]
+\[
+  \boxed{\P\!\left(\sup_{s\ge 0}(B_s-cs)\ge a\right)=e^{-2ca}.}
+\]
+\textbf{Interpretación.} Fórmula de Cramér–Lundberg: probabilidad de ruina de una aseguradora
+con reserva $a$ y tasa de prima $c$ cuando los siniestros son brownianos.
+\end{solucion}
+
+%─── Ejercicio 41 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 41 — $\tau=\inf\{t:B_t^2+t=1\}$}
+
+\begin{recuadro}
+Determine si $\tau$ es acotado, integrable y estrictamente positivo.
+\end{recuadro}
+
+\begin{solucion}
+\begin{itemize}[leftmargin=*]
+\item \textbf{$\tau>0$ c.s.} En $t=0$: $B_0^2+0=0<1$. Por continuidad, $\tau>0$ c.s.
+\item \textbf{$\tau\le 1$ c.s.} La función $f(t)=B_t^2+t\ge t$, luego $f(t)\ge 1$ para $t\ge 1$.
+  El proceso continuo que parte de $0$ debe cruzar $1$ antes de $t=1$.
+\item \textbf{$\E[\tau]<\infty$.} Consecuencia de $\tau\le 1$.
+\end{itemize}
+Geométricamente, $\tau$ es el primer tiempo en que el MB toca las curvas $\pm\sqrt{1-t}$,
+que convergen al origen en $t=1$, garantizando $\tau\le 1$ c.s.
+\end{solucion}
+
+%─── Ejercicio 42 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 42 — Tiempo de entrada a un cerrado}
+
+\begin{recuadro}
+Sea $A\subset\R$ cerrado no vacío. Pruebe que $\tau_A$ es tiempo de paro.
+Dé condición para $\tau_A<\infty$ c.s.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{Tiempo de paro.}
+\[
+  \{\tau_A\le t\}=\{d(B_{[0,t]},A)=0\}
+  =\left\{\inf_{s\in[0,t]\cap\mathbb{Q}}d(B_s,A)=0\right\}\in\F_t,
+\]
+pues $d(B_s,A)$ es continua en $s$ (por continuidad de $B$) y los racionales son densos.
+
+\textbf{Condición para $\tau_A<\infty$ c.s.}
+Para cualquier $A$ cerrado no vacío en $\R$: el MB es recurrente y visita todo abierto,
+luego existe $a\in A$ y $\tau_a<\infty$ c.s.\ (Ejercicio~36), por tanto $\tau_A\le\tau_a<\infty$ c.s.
+\end{solucion}
+
+%─── Ejercicio 43 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 43 — $T=\inf\{t:B_t=t\}$ y cambio de medida}
+
+\begin{recuadro}
+Discuta si $T<\infty$ c.s.\ e identifique la estrategia con cambio de medida.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{Análisis.} $T=\inf\{t:X_t=0\}$ donde $X_t=B_t-t$ es MB con deriva $\mu=-1$.
+Para $\mu<0$, $X_t\to-\infty$ c.s., luego $\P(T<\infty)<1$.
+
+\textbf{Cambio de medida.} Bajo $Q$ definida por
+$dQ/dP|_{\F_t}=e^{B_t-t/2}$, el proceso $\tilde B_t:=B_t-t$ es MB estándar bajo $Q$
+(Girsanov con $\theta=1$). Entonces $T=\inf\{t:\tilde B_t=0\}$ satisface $Q(T<\infty)=1$.
+La ley de $T$ bajo $P$ se recupera:
+\[
+  \P(T\in dt)=E^Q\!\left[e^{-\tilde B_T-T/2};\,T\in dt\right]=e^{-t/2}\,Q(T\in dt).
+\]
+\end{solucion}
+
+%─── Ejercicio 44 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 44 — Salida de $[-1,1]$ vs.\ llegada unilateral}
+
+\begin{recuadro}
+Sean $T:=\inf\{t:|B_t|=1\}$ y $\tilde T:=\inf\{t:B_t=1\}$. Pruebe $\P(T>t)\le ce^{-\beta t}$,
+$\E[T]<\infty$; obtenga la densidad de $\tilde T$ y pruebe $\E[\tilde T]=\infty$.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{Cola exponencial de $T$.} Sea $p=\P(\sup_{s\le 1}|B_s|\ge 1)>0$. Por Markov fuerte:
+\[
+  \P(T>n)\le(1-p)^n=e^{n\log(1-p)}\implies\P(T>t)\le ce^{-\beta t},\;\beta=-\log(1-p)>0.
+\]
+\textbf{$\E[T]<\infty$.} $\E[T]=\int_0^\infty\P(T>t)\,dt\le c/\beta<\infty$.
+Directamente del Ejercicio~35: $\E[T]=1\cdot 1=1$.
+
+\textbf{Densidad de $\tilde T$.} Por reflexión con $a=1$:
+\[
+  f_{\tilde T}(t)=\frac{1}{\sqrt{2\pi t^3}}\,e^{-1/(2t)},\quad t>0.
+\]
+\textbf{$\E[\tilde T]=\infty$.} $t\cdot f_{\tilde T}(t)\sim(2\pi)^{-1/2}t^{-1/2}\to\infty$
+al integrar en $+\infty$.
+
+\textbf{Contraste.} $T$ tiene cola exponencial; $\tilde T$ tiene cola $t^{-3/2}$ (ley de Lévy).
+\end{solucion}
+
+%─── Ejercicio 45 ──────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 45 — Dependencia entre $T^*$ y $B_{T^*}$}
+
+\begin{recuadro}
+Sea $T^*:=\inf\{t:B_t=1\text{ o }B_t=-3\}$. Analice la dependencia entre $T^*$ y $B_{T^*}$.
+\end{recuadro}
+
+\begin{solucion}
+\textbf{Distribución de salida.} Ejercicio~17 con $a=1$, $b=3$:
+$\P(B_{T^*}=1)=3/4$, $\P(B_{T^*}=-3)=1/4$.
+
+\textbf{Dependencia.} Condicionalmente a $\{B_{T^*}=1\}$, el MB recorre distancia $1$ (corta,
+tiempo típico $\sim 1$); condicionalmente a $\{B_{T^*}=-3\}$, recorre distancia $3$
+(tiempo típico $\sim 9$). Luego
+$\E[T^*\mid B_{T^*}=1]\ne\E[T^*\mid B_{T^*}=-3]$: $T^*\not\perp B_{T^*}$.
+
+\textbf{Contraste simétrico.} Para barreras $(-a,a)$: $T\perp B_T$ por simetría del MB.
+\end{solucion}
+\end{document}
